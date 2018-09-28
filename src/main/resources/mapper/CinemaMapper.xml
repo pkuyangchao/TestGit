@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yc.movie.dao.CinemaMapper">
+  <resultMap id="BaseResultMap" type="com.yc.movie.bean.Cinema">
+    <id column="cinema_id" jdbcType="INTEGER" property="cinemaId" />
+    <result column="cinema_name" jdbcType="VARCHAR" property="cinemaName" />
+    <result column="cinema_area" jdbcType="VARCHAR" property="cinemaArea" />
+    <result column="cinema_img" jdbcType="VARCHAR" property="cinemaImg" />
+    <result column="cinema_phone" jdbcType="VARCHAR" property="cinemaPhone" />
+    <result column="cinema_longitude" jdbcType="VARCHAR" property="cinemaLongitude" />
+    <result column="cinema_latitude" jdbcType="VARCHAR" property="cinemaLatitude" />
+    <result column="cinema_city" jdbcType="VARCHAR" property="cinemaCity" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    cinema_id, cinema_name, cinema_area, cinema_img, cinema_phone, cinema_longitude, 
+    cinema_latitude, cinema_city
+  </sql>
+  
+  <!-- List<Cinema> selectCinemaAllByKeywords(@Param("area")String area,@Param("name") String name,@Param("hall") String hall);
+   -->
+   <select id="selectCinemaAllByKeywords" resultMap="BaseResultMap">
+   	select a.cinema_id,a.cinema_name,a.cinema_area,a.cinema_img,a.cinema_phone,a.cinema_longitude,a.cinema_latitude,a.cinema_city from cinema a,cinemahall h where a.cinema_name like #{name} and a.cinema_area like #{area}
+  	and a.cinema_id=h.cinema_id and h.hall_type like #{hall} group by a.cinema_id
+   </select>
+   
+  <select id="selectByExample" parameterType="com.yc.movie.bean.CinemaExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from cinema
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cinema
+    where cinema_id = #{cinemaId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cinema
+    where cinema_id = #{cinemaId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.movie.bean.CinemaExample">
+    delete from cinema
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.movie.bean.Cinema">
+    insert into cinema (cinema_id, cinema_name, cinema_area, 
+      cinema_img, cinema_phone, cinema_longitude, 
+      cinema_latitude, cinema_city)
+    values (#{cinemaId,jdbcType=INTEGER}, #{cinemaName,jdbcType=VARCHAR}, #{cinemaArea,jdbcType=VARCHAR}, 
+      #{cinemaImg,jdbcType=VARCHAR}, #{cinemaPhone,jdbcType=VARCHAR}, #{cinemaLongitude,jdbcType=VARCHAR}, 
+      #{cinemaLatitude,jdbcType=VARCHAR}, #{cinemaCity,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.movie.bean.Cinema">
+    insert into cinema
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cinemaId != null">
+        cinema_id,
+      </if>
+      <if test="cinemaName != null">
+        cinema_name,
+      </if>
+      <if test="cinemaArea != null">
+        cinema_area,
+      </if>
+      <if test="cinemaImg != null">
+        cinema_img,
+      </if>
+      <if test="cinemaPhone != null">
+        cinema_phone,
+      </if>
+      <if test="cinemaLongitude != null">
+        cinema_longitude,
+      </if>
+      <if test="cinemaLatitude != null">
+        cinema_latitude,
+      </if>
+      <if test="cinemaCity != null">
+        cinema_city,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cinemaId != null">
+        #{cinemaId,jdbcType=INTEGER},
+      </if>
+      <if test="cinemaName != null">
+        #{cinemaName,jdbcType=VARCHAR},
+      </if>
+      <if test="cinemaArea != null">
+        #{cinemaArea,jdbcType=VARCHAR},
+      </if>
+      <if test="cinemaImg != null">
+        #{cinemaImg,jdbcType=VARCHAR},
+      </if>
+      <if test="cinemaPhone != null">
+        #{cinemaPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cinemaLongitude != null">
+        #{cinemaLongitude,jdbcType=VARCHAR},
+      </if>
+      <if test="cinemaLatitude != null">
+        #{cinemaLatitude,jdbcType=VARCHAR},
+      </if>
+      <if test="cinemaCity != null">
+        #{cinemaCity,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.movie.bean.CinemaExample" resultType="java.lang.Long">
+    select count(*) from cinema
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cinema
+    <set>
+      <if test="record.cinemaId != null">
+        cinema_id = #{record.cinemaId,jdbcType=INTEGER},
+      </if>
+      <if test="record.cinemaName != null">
+        cinema_name = #{record.cinemaName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cinemaArea != null">
+        cinema_area = #{record.cinemaArea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cinemaImg != null">
+        cinema_img = #{record.cinemaImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cinemaPhone != null">
+        cinema_phone = #{record.cinemaPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cinemaLongitude != null">
+        cinema_longitude = #{record.cinemaLongitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cinemaLatitude != null">
+        cinema_latitude = #{record.cinemaLatitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cinemaCity != null">
+        cinema_city = #{record.cinemaCity,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cinema
+    set cinema_id = #{record.cinemaId,jdbcType=INTEGER},
+      cinema_name = #{record.cinemaName,jdbcType=VARCHAR},
+      cinema_area = #{record.cinemaArea,jdbcType=VARCHAR},
+      cinema_img = #{record.cinemaImg,jdbcType=VARCHAR},
+      cinema_phone = #{record.cinemaPhone,jdbcType=VARCHAR},
+      cinema_longitude = #{record.cinemaLongitude,jdbcType=VARCHAR},
+      cinema_latitude = #{record.cinemaLatitude,jdbcType=VARCHAR},
+      cinema_city = #{record.cinemaCity,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.movie.bean.Cinema">
+    update cinema
+    <set>
+      <if test="cinemaName != null">
+        cinema_name = #{cinemaName,jdbcType=VARCHAR},
+      </if>
+      <if test="cinemaArea != null">
+        cinema_area = #{cinemaArea,jdbcType=VARCHAR},
+      </if>
+      <if test="cinemaImg != null">
+        cinema_img = #{cinemaImg,jdbcType=VARCHAR},
+      </if>
+      <if test="cinemaPhone != null">
+        cinema_phone = #{cinemaPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cinemaLongitude != null">
+        cinema_longitude = #{cinemaLongitude,jdbcType=VARCHAR},
+      </if>
+      <if test="cinemaLatitude != null">
+        cinema_latitude = #{cinemaLatitude,jdbcType=VARCHAR},
+      </if>
+      <if test="cinemaCity != null">
+        cinema_city = #{cinemaCity,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cinema_id = #{cinemaId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.movie.bean.Cinema">
+    update cinema
+    set cinema_name = #{cinemaName,jdbcType=VARCHAR},
+      cinema_area = #{cinemaArea,jdbcType=VARCHAR},
+      cinema_img = #{cinemaImg,jdbcType=VARCHAR},
+      cinema_phone = #{cinemaPhone,jdbcType=VARCHAR},
+      cinema_longitude = #{cinemaLongitude,jdbcType=VARCHAR},
+      cinema_latitude = #{cinemaLatitude,jdbcType=VARCHAR},
+      cinema_city = #{cinemaCity,jdbcType=VARCHAR}
+    where cinema_id = #{cinemaId,jdbcType=INTEGER}
+  </update>
+</mapper>

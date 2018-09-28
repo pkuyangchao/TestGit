@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yc.movie.dao.LanguageMapper">
+  <resultMap id="BaseResultMap" type="com.yc.movie.bean.Language">
+    <id column="language_id" jdbcType="INTEGER" property="languageId" />
+    <result column="language_name" jdbcType="VARCHAR" property="languageName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    language_id, language_name
+  </sql>
+  <select id="selectByExample" parameterType="com.yc.movie.bean.LanguageExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from language
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from language
+    where language_id = #{languageId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from language
+    where language_id = #{languageId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.movie.bean.LanguageExample">
+    delete from language
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.movie.bean.Language">
+    insert into language (language_id, language_name)
+    values (#{languageId,jdbcType=INTEGER}, #{languageName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.movie.bean.Language">
+    insert into language
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="languageId != null">
+        language_id,
+      </if>
+      <if test="languageName != null">
+        language_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="languageId != null">
+        #{languageId,jdbcType=INTEGER},
+      </if>
+      <if test="languageName != null">
+        #{languageName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.movie.bean.LanguageExample" resultType="java.lang.Long">
+    select count(*) from language
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update language
+    <set>
+      <if test="record.languageId != null">
+        language_id = #{record.languageId,jdbcType=INTEGER},
+      </if>
+      <if test="record.languageName != null">
+        language_name = #{record.languageName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update language
+    set language_id = #{record.languageId,jdbcType=INTEGER},
+      language_name = #{record.languageName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.movie.bean.Language">
+    update language
+    <set>
+      <if test="languageName != null">
+        language_name = #{languageName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where language_id = #{languageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.movie.bean.Language">
+    update language
+    set language_name = #{languageName,jdbcType=VARCHAR}
+    where language_id = #{languageId,jdbcType=INTEGER}
+  </update>
+</mapper>

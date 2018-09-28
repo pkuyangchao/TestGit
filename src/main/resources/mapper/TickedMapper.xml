@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yc.movie.dao.TickedMapper">
+  <resultMap id="BaseResultMap" type="com.yc.movie.bean.Ticked">
+    <id column="ticked_id" jdbcType="INTEGER" property="tickedId" />
+    <result column="ticked_play" jdbcType="INTEGER" property="tickedPlay" />
+    <result column="ticked_user" jdbcType="INTEGER" property="tickedUser" />
+    <result column="ticked_seat" jdbcType="INTEGER" property="tickedSeat" />
+    <result column="ticked_price" jdbcType="REAL" property="tickedPrice" />
+    <result column="ticked_time" jdbcType="VARCHAR" property="tickedTime" />
+    <result column="ticked_flag" jdbcType="INTEGER" property="tickedFlag" />
+    <result column="ticked_code" jdbcType="VARCHAR" property="tickedCode" />
+    <result column="ticked_endtime" jdbcType="VARCHAR" property="tickedEndtime" />
+    <result column="movie_id" jdbcType="INTEGER" property="movieId" />
+    <result column="ticked_img" jdbcType="VARCHAR" property="tickedImg" />
+  </resultMap>
+  <resultMap id="ResultMapByStep" type="com.yc.movie.bean.Ticked">
+    <id column="ticked_id" jdbcType="INTEGER" property="tickedId" />
+    <result column="ticked_play" jdbcType="INTEGER" property="tickedPlay" />
+    <result column="ticked_user" jdbcType="INTEGER" property="tickedUser" />
+    <result column="ticked_seat" jdbcType="INTEGER" property="tickedSeat" />
+    <result column="ticked_price" jdbcType="REAL" property="tickedPrice" />
+    <result column="ticked_time" jdbcType="VARCHAR" property="tickedTime" />
+    <result column="ticked_flag" jdbcType="INTEGER" property="tickedFlag" />
+    <result column="ticked_code" jdbcType="VARCHAR" property="tickedCode" />
+    <result column="ticked_endtime" jdbcType="VARCHAR" property="tickedEndtime" />
+    <result column="movie_id" jdbcType="INTEGER" property="movieId" />
+    <result column="ticked_img" jdbcType="VARCHAR" property="tickedImg" />
+    <association property="user" 
+	 		select="com.yc.movie.dao.UserMapper.selectByPrimaryKey"
+	 		column="ticked_user">
+ 	</association>
+    <association property="hitmovie" 
+	 		select="com.yc.movie.dao.HitmovieMapper.selectByPrimaryKey"
+	 		column="movie_id">
+ 	</association>
+ 	<association property="play" 
+	 		select="com.yc.movie.dao.PlayMapper.selectByPrimaryKey"
+	 		column="ticked_play">
+ 	</association>
+ 	<association property="cinemaseat" 
+	 		select="com.yc.movie.dao.CinemaseatMapper.selectByPrimaryKey"
+	 		column="ticked_seat">
+ 	</association>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ticked_id, ticked_play, ticked_user, ticked_seat, ticked_price, ticked_time, ticked_flag, 
+    ticked_code, ticked_endtime, movie_id, ticked_img
+  </sql>
+  <select id="selectByExample" parameterType="com.yc.movie.bean.TickedExample" resultMap="ResultMapByStep">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ticked
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapByStep">
+    select 
+    <include refid="Base_Column_List" />
+    from ticked
+    where ticked_id = #{tickedId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ticked
+    where ticked_id = #{tickedId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.movie.bean.TickedExample">
+    delete from ticked
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.movie.bean.Ticked">
+    insert into ticked (ticked_id, ticked_play, ticked_user, 
+      ticked_seat, ticked_price, ticked_time, 
+      ticked_flag, ticked_code, ticked_endtime, 
+      movie_id, ticked_img)
+    values (#{tickedId,jdbcType=INTEGER}, #{tickedPlay,jdbcType=INTEGER}, #{tickedUser,jdbcType=INTEGER}, 
+      #{tickedSeat,jdbcType=INTEGER}, #{tickedPrice,jdbcType=REAL}, #{tickedTime,jdbcType=VARCHAR}, 
+      #{tickedFlag,jdbcType=INTEGER}, #{tickedCode,jdbcType=VARCHAR}, #{tickedEndtime,jdbcType=VARCHAR}, 
+      #{movieId,jdbcType=INTEGER}, #{tickedImg,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.movie.bean.Ticked">
+    insert into ticked
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tickedId != null">
+        ticked_id,
+      </if>
+      <if test="tickedPlay != null">
+        ticked_play,
+      </if>
+      <if test="tickedUser != null">
+        ticked_user,
+      </if>
+      <if test="tickedSeat != null">
+        ticked_seat,
+      </if>
+      <if test="tickedPrice != null">
+        ticked_price,
+      </if>
+      <if test="tickedTime != null">
+        ticked_time,
+      </if>
+      <if test="tickedFlag != null">
+        ticked_flag,
+      </if>
+      <if test="tickedCode != null">
+        ticked_code,
+      </if>
+      <if test="tickedEndtime != null">
+        ticked_endtime,
+      </if>
+      <if test="movieId != null">
+        movie_id,
+      </if>
+      <if test="tickedImg != null">
+        ticked_img,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tickedId != null">
+        #{tickedId,jdbcType=INTEGER},
+      </if>
+      <if test="tickedPlay != null">
+        #{tickedPlay,jdbcType=INTEGER},
+      </if>
+      <if test="tickedUser != null">
+        #{tickedUser,jdbcType=INTEGER},
+      </if>
+      <if test="tickedSeat != null">
+        #{tickedSeat,jdbcType=INTEGER},
+      </if>
+      <if test="tickedPrice != null">
+        #{tickedPrice,jdbcType=REAL},
+      </if>
+      <if test="tickedTime != null">
+        #{tickedTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tickedFlag != null">
+        #{tickedFlag,jdbcType=INTEGER},
+      </if>
+      <if test="tickedCode != null">
+        #{tickedCode,jdbcType=VARCHAR},
+      </if>
+      <if test="tickedEndtime != null">
+        #{tickedEndtime,jdbcType=VARCHAR},
+      </if>
+      <if test="movieId != null">
+        #{movieId,jdbcType=INTEGER},
+      </if>
+      <if test="tickedImg != null">
+        #{tickedImg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.movie.bean.TickedExample" resultType="java.lang.Long">
+    select count(*) from ticked
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ticked
+    <set>
+      <if test="record.tickedId != null">
+        ticked_id = #{record.tickedId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tickedPlay != null">
+        ticked_play = #{record.tickedPlay,jdbcType=INTEGER},
+      </if>
+      <if test="record.tickedUser != null">
+        ticked_user = #{record.tickedUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.tickedSeat != null">
+        ticked_seat = #{record.tickedSeat,jdbcType=INTEGER},
+      </if>
+      <if test="record.tickedPrice != null">
+        ticked_price = #{record.tickedPrice,jdbcType=REAL},
+      </if>
+      <if test="record.tickedTime != null">
+        ticked_time = #{record.tickedTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tickedFlag != null">
+        ticked_flag = #{record.tickedFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.tickedCode != null">
+        ticked_code = #{record.tickedCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tickedEndtime != null">
+        ticked_endtime = #{record.tickedEndtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.movieId != null">
+        movie_id = #{record.movieId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tickedImg != null">
+        ticked_img = #{record.tickedImg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ticked
+    set ticked_id = #{record.tickedId,jdbcType=INTEGER},
+      ticked_play = #{record.tickedPlay,jdbcType=INTEGER},
+      ticked_user = #{record.tickedUser,jdbcType=INTEGER},
+      ticked_seat = #{record.tickedSeat,jdbcType=INTEGER},
+      ticked_price = #{record.tickedPrice,jdbcType=REAL},
+      ticked_time = #{record.tickedTime,jdbcType=VARCHAR},
+      ticked_flag = #{record.tickedFlag,jdbcType=INTEGER},
+      ticked_code = #{record.tickedCode,jdbcType=VARCHAR},
+      ticked_endtime = #{record.tickedEndtime,jdbcType=VARCHAR},
+      movie_id = #{record.movieId,jdbcType=INTEGER},
+      ticked_img = #{record.tickedImg,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.movie.bean.Ticked">
+    update ticked
+    <set>
+      <if test="tickedPlay != null">
+        ticked_play = #{tickedPlay,jdbcType=INTEGER},
+      </if>
+      <if test="tickedUser != null">
+        ticked_user = #{tickedUser,jdbcType=INTEGER},
+      </if>
+      <if test="tickedSeat != null">
+        ticked_seat = #{tickedSeat,jdbcType=INTEGER},
+      </if>
+      <if test="tickedPrice != null">
+        ticked_price = #{tickedPrice,jdbcType=REAL},
+      </if>
+      <if test="tickedTime != null">
+        ticked_time = #{tickedTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tickedFlag != null">
+        ticked_flag = #{tickedFlag,jdbcType=INTEGER},
+      </if>
+      <if test="tickedCode != null">
+        ticked_code = #{tickedCode,jdbcType=VARCHAR},
+      </if>
+      <if test="tickedEndtime != null">
+        ticked_endtime = #{tickedEndtime,jdbcType=VARCHAR},
+      </if>
+      <if test="movieId != null">
+        movie_id = #{movieId,jdbcType=INTEGER},
+      </if>
+      <if test="tickedImg != null">
+        ticked_img = #{tickedImg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ticked_id = #{tickedId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.movie.bean.Ticked">
+    update ticked
+    set ticked_play = #{tickedPlay,jdbcType=INTEGER},
+      ticked_user = #{tickedUser,jdbcType=INTEGER},
+      ticked_seat = #{tickedSeat,jdbcType=INTEGER},
+      ticked_price = #{tickedPrice,jdbcType=REAL},
+      ticked_time = #{tickedTime,jdbcType=VARCHAR},
+      ticked_flag = #{tickedFlag,jdbcType=INTEGER},
+      ticked_code = #{tickedCode,jdbcType=VARCHAR},
+      ticked_endtime = #{tickedEndtime,jdbcType=VARCHAR},
+      movie_id = #{movieId,jdbcType=INTEGER},
+      ticked_img = #{tickedImg,jdbcType=VARCHAR}
+    where ticked_id = #{tickedId,jdbcType=INTEGER}
+  </update>
+</mapper>

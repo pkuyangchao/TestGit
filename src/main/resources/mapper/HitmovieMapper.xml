@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yc.movie.dao.HitmovieMapper">
+  <resultMap id="BaseResultMap" type="com.yc.movie.bean.Hitmovie">
+    <id column="movie_id" jdbcType="INTEGER" property="movieId" />
+    <result column="movie_name" jdbcType="VARCHAR" property="movieName" />
+    <result column="movie_director" jdbcType="VARCHAR" property="movieDirector" />
+    <result column="movie_scen" jdbcType="VARCHAR" property="movieScen" />
+    <result column="actor_name" jdbcType="VARCHAR" property="actorName" />
+    <result column="movie_type" jdbcType="VARCHAR" property="movieType" />
+    <result column="movie_country" jdbcType="VARCHAR" property="movieCountry" />
+    <result column="movie_language" jdbcType="VARCHAR" property="movieLanguage" />
+    <result column="movie_showtime" jdbcType="VARCHAR" property="movieShowtime" />
+    <result column="movie_runtime" jdbcType="VARCHAR" property="movieRuntime" />
+    <result column="look_count" jdbcType="INTEGER" property="lookCount" />
+    <result column="movie_img" jdbcType="VARCHAR" property="movieImg" />
+    <result column="movie_grade" jdbcType="REAL" property="movieGrade" />
+    <result column="movie_state" jdbcType="VARCHAR" property="movieState" />
+    <result column="movie_pricenum" jdbcType="REAL" property="moviePricenum" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yc.movie.bean.Hitmovie">
+    <result column="movie_summary" jdbcType="LONGVARCHAR" property="movieSummary" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    movie_id, movie_name, movie_director, movie_scen, actor_name, movie_type, movie_country, 
+    movie_language, movie_showtime, movie_runtime, look_count, movie_img, movie_grade, 
+    movie_state, movie_pricenum
+  </sql>
+  <sql id="Blob_Column_List">
+    movie_summary
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.yc.movie.bean.HitmovieExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from hitmovie
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.yc.movie.bean.HitmovieExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hitmovie
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from hitmovie
+    where movie_id = #{movieId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from hitmovie
+    where movie_id = #{movieId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.movie.bean.HitmovieExample">
+    delete from hitmovie
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.movie.bean.Hitmovie">
+    insert into hitmovie (movie_id, movie_name, movie_director, 
+      movie_scen, actor_name, movie_type, 
+      movie_country, movie_language, movie_showtime, 
+      movie_runtime, look_count, movie_img, 
+      movie_grade, movie_state, movie_pricenum, 
+      movie_summary)
+    values (#{movieId,jdbcType=INTEGER}, #{movieName,jdbcType=VARCHAR}, #{movieDirector,jdbcType=VARCHAR}, 
+      #{movieScen,jdbcType=VARCHAR}, #{actorName,jdbcType=VARCHAR}, #{movieType,jdbcType=VARCHAR}, 
+      #{movieCountry,jdbcType=VARCHAR}, #{movieLanguage,jdbcType=VARCHAR}, #{movieShowtime,jdbcType=VARCHAR}, 
+      #{movieRuntime,jdbcType=VARCHAR}, #{lookCount,jdbcType=INTEGER}, #{movieImg,jdbcType=VARCHAR}, 
+      #{movieGrade,jdbcType=REAL}, #{movieState,jdbcType=VARCHAR}, #{moviePricenum,jdbcType=REAL}, 
+      #{movieSummary,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.movie.bean.Hitmovie">
+    insert into hitmovie
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="movieId != null">
+        movie_id,
+      </if>
+      <if test="movieName != null">
+        movie_name,
+      </if>
+      <if test="movieDirector != null">
+        movie_director,
+      </if>
+      <if test="movieScen != null">
+        movie_scen,
+      </if>
+      <if test="actorName != null">
+        actor_name,
+      </if>
+      <if test="movieType != null">
+        movie_type,
+      </if>
+      <if test="movieCountry != null">
+        movie_country,
+      </if>
+      <if test="movieLanguage != null">
+        movie_language,
+      </if>
+      <if test="movieShowtime != null">
+        movie_showtime,
+      </if>
+      <if test="movieRuntime != null">
+        movie_runtime,
+      </if>
+      <if test="lookCount != null">
+        look_count,
+      </if>
+      <if test="movieImg != null">
+        movie_img,
+      </if>
+      <if test="movieGrade != null">
+        movie_grade,
+      </if>
+      <if test="movieState != null">
+        movie_state,
+      </if>
+      <if test="moviePricenum != null">
+        movie_pricenum,
+      </if>
+      <if test="movieSummary != null">
+        movie_summary,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="movieId != null">
+        #{movieId,jdbcType=INTEGER},
+      </if>
+      <if test="movieName != null">
+        #{movieName,jdbcType=VARCHAR},
+      </if>
+      <if test="movieDirector != null">
+        #{movieDirector,jdbcType=VARCHAR},
+      </if>
+      <if test="movieScen != null">
+        #{movieScen,jdbcType=VARCHAR},
+      </if>
+      <if test="actorName != null">
+        #{actorName,jdbcType=VARCHAR},
+      </if>
+      <if test="movieType != null">
+        #{movieType,jdbcType=VARCHAR},
+      </if>
+      <if test="movieCountry != null">
+        #{movieCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="movieLanguage != null">
+        #{movieLanguage,jdbcType=VARCHAR},
+      </if>
+      <if test="movieShowtime != null">
+        #{movieShowtime,jdbcType=VARCHAR},
+      </if>
+      <if test="movieRuntime != null">
+        #{movieRuntime,jdbcType=VARCHAR},
+      </if>
+      <if test="lookCount != null">
+        #{lookCount,jdbcType=INTEGER},
+      </if>
+      <if test="movieImg != null">
+        #{movieImg,jdbcType=VARCHAR},
+      </if>
+      <if test="movieGrade != null">
+        #{movieGrade,jdbcType=REAL},
+      </if>
+      <if test="movieState != null">
+        #{movieState,jdbcType=VARCHAR},
+      </if>
+      <if test="moviePricenum != null">
+        #{moviePricenum,jdbcType=REAL},
+      </if>
+      <if test="movieSummary != null">
+        #{movieSummary,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.movie.bean.HitmovieExample" resultType="java.lang.Long">
+    select count(*) from hitmovie
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update hitmovie
+    <set>
+      <if test="record.movieId != null">
+        movie_id = #{record.movieId,jdbcType=INTEGER},
+      </if>
+      <if test="record.movieName != null">
+        movie_name = #{record.movieName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.movieDirector != null">
+        movie_director = #{record.movieDirector,jdbcType=VARCHAR},
+      </if>
+      <if test="record.movieScen != null">
+        movie_scen = #{record.movieScen,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actorName != null">
+        actor_name = #{record.actorName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.movieType != null">
+        movie_type = #{record.movieType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.movieCountry != null">
+        movie_country = #{record.movieCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.movieLanguage != null">
+        movie_language = #{record.movieLanguage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.movieShowtime != null">
+        movie_showtime = #{record.movieShowtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.movieRuntime != null">
+        movie_runtime = #{record.movieRuntime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lookCount != null">
+        look_count = #{record.lookCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.movieImg != null">
+        movie_img = #{record.movieImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.movieGrade != null">
+        movie_grade = #{record.movieGrade,jdbcType=REAL},
+      </if>
+      <if test="record.movieState != null">
+        movie_state = #{record.movieState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.moviePricenum != null">
+        movie_pricenum = #{record.moviePricenum,jdbcType=REAL},
+      </if>
+      <if test="record.movieSummary != null">
+        movie_summary = #{record.movieSummary,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update hitmovie
+    set movie_id = #{record.movieId,jdbcType=INTEGER},
+      movie_name = #{record.movieName,jdbcType=VARCHAR},
+      movie_director = #{record.movieDirector,jdbcType=VARCHAR},
+      movie_scen = #{record.movieScen,jdbcType=VARCHAR},
+      actor_name = #{record.actorName,jdbcType=VARCHAR},
+      movie_type = #{record.movieType,jdbcType=VARCHAR},
+      movie_country = #{record.movieCountry,jdbcType=VARCHAR},
+      movie_language = #{record.movieLanguage,jdbcType=VARCHAR},
+      movie_showtime = #{record.movieShowtime,jdbcType=VARCHAR},
+      movie_runtime = #{record.movieRuntime,jdbcType=VARCHAR},
+      look_count = #{record.lookCount,jdbcType=INTEGER},
+      movie_img = #{record.movieImg,jdbcType=VARCHAR},
+      movie_grade = #{record.movieGrade,jdbcType=REAL},
+      movie_state = #{record.movieState,jdbcType=VARCHAR},
+      movie_pricenum = #{record.moviePricenum,jdbcType=REAL},
+      movie_summary = #{record.movieSummary,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update hitmovie
+    set movie_id = #{record.movieId,jdbcType=INTEGER},
+      movie_name = #{record.movieName,jdbcType=VARCHAR},
+      movie_director = #{record.movieDirector,jdbcType=VARCHAR},
+      movie_scen = #{record.movieScen,jdbcType=VARCHAR},
+      actor_name = #{record.actorName,jdbcType=VARCHAR},
+      movie_type = #{record.movieType,jdbcType=VARCHAR},
+      movie_country = #{record.movieCountry,jdbcType=VARCHAR},
+      movie_language = #{record.movieLanguage,jdbcType=VARCHAR},
+      movie_showtime = #{record.movieShowtime,jdbcType=VARCHAR},
+      movie_runtime = #{record.movieRuntime,jdbcType=VARCHAR},
+      look_count = #{record.lookCount,jdbcType=INTEGER},
+      movie_img = #{record.movieImg,jdbcType=VARCHAR},
+      movie_grade = #{record.movieGrade,jdbcType=REAL},
+      movie_state = #{record.movieState,jdbcType=VARCHAR},
+      movie_pricenum = #{record.moviePricenum,jdbcType=REAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.movie.bean.Hitmovie">
+    update hitmovie
+    <set>
+      <if test="movieName != null">
+        movie_name = #{movieName,jdbcType=VARCHAR},
+      </if>
+      <if test="movieDirector != null">
+        movie_director = #{movieDirector,jdbcType=VARCHAR},
+      </if>
+      <if test="movieScen != null">
+        movie_scen = #{movieScen,jdbcType=VARCHAR},
+      </if>
+      <if test="actorName != null">
+        actor_name = #{actorName,jdbcType=VARCHAR},
+      </if>
+      <if test="movieType != null">
+        movie_type = #{movieType,jdbcType=VARCHAR},
+      </if>
+      <if test="movieCountry != null">
+        movie_country = #{movieCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="movieLanguage != null">
+        movie_language = #{movieLanguage,jdbcType=VARCHAR},
+      </if>
+      <if test="movieShowtime != null">
+        movie_showtime = #{movieShowtime,jdbcType=VARCHAR},
+      </if>
+      <if test="movieRuntime != null">
+        movie_runtime = #{movieRuntime,jdbcType=VARCHAR},
+      </if>
+      <if test="lookCount != null">
+        look_count = #{lookCount,jdbcType=INTEGER},
+      </if>
+      <if test="movieImg != null">
+        movie_img = #{movieImg,jdbcType=VARCHAR},
+      </if>
+      <if test="movieGrade != null">
+        movie_grade = #{movieGrade,jdbcType=REAL},
+      </if>
+      <if test="movieState != null">
+        movie_state = #{movieState,jdbcType=VARCHAR},
+      </if>
+      <if test="moviePricenum != null">
+        movie_pricenum = #{moviePricenum,jdbcType=REAL},
+      </if>
+      <if test="movieSummary != null">
+        movie_summary = #{movieSummary,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where movie_id = #{movieId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yc.movie.bean.Hitmovie">
+    update hitmovie
+    set movie_name = #{movieName,jdbcType=VARCHAR},
+      movie_director = #{movieDirector,jdbcType=VARCHAR},
+      movie_scen = #{movieScen,jdbcType=VARCHAR},
+      actor_name = #{actorName,jdbcType=VARCHAR},
+      movie_type = #{movieType,jdbcType=VARCHAR},
+      movie_country = #{movieCountry,jdbcType=VARCHAR},
+      movie_language = #{movieLanguage,jdbcType=VARCHAR},
+      movie_showtime = #{movieShowtime,jdbcType=VARCHAR},
+      movie_runtime = #{movieRuntime,jdbcType=VARCHAR},
+      look_count = #{lookCount,jdbcType=INTEGER},
+      movie_img = #{movieImg,jdbcType=VARCHAR},
+      movie_grade = #{movieGrade,jdbcType=REAL},
+      movie_state = #{movieState,jdbcType=VARCHAR},
+      movie_pricenum = #{moviePricenum,jdbcType=REAL},
+      movie_summary = #{movieSummary,jdbcType=LONGVARCHAR}
+    where movie_id = #{movieId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.movie.bean.Hitmovie">
+    update hitmovie
+    set movie_name = #{movieName,jdbcType=VARCHAR},
+      movie_director = #{movieDirector,jdbcType=VARCHAR},
+      movie_scen = #{movieScen,jdbcType=VARCHAR},
+      actor_name = #{actorName,jdbcType=VARCHAR},
+      movie_type = #{movieType,jdbcType=VARCHAR},
+      movie_country = #{movieCountry,jdbcType=VARCHAR},
+      movie_language = #{movieLanguage,jdbcType=VARCHAR},
+      movie_showtime = #{movieShowtime,jdbcType=VARCHAR},
+      movie_runtime = #{movieRuntime,jdbcType=VARCHAR},
+      look_count = #{lookCount,jdbcType=INTEGER},
+      movie_img = #{movieImg,jdbcType=VARCHAR},
+      movie_grade = #{movieGrade,jdbcType=REAL},
+      movie_state = #{movieState,jdbcType=VARCHAR},
+      movie_pricenum = #{moviePricenum,jdbcType=REAL}
+    where movie_id = #{movieId,jdbcType=INTEGER}
+  </update>
+</mapper>

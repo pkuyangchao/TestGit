@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yc.movie.dao.NewsMapper">
+  <resultMap id="BaseResultMap" type="com.yc.movie.bean.News">
+    <id column="news_id" jdbcType="INTEGER" property="newsId" />
+    <result column="news_title" jdbcType="VARCHAR" property="newsTitle" />
+    <result column="news_time" jdbcType="VARCHAR" property="newsTime" />
+    <result column="news_lookcount" jdbcType="INTEGER" property="newsLookcount" />
+    <result column="news_picture" jdbcType="VARCHAR" property="newsPicture" />
+    <result column="news_movie" jdbcType="INTEGER" property="newsMovie" />
+    <result column="news_state" jdbcType="VARCHAR" property="newsState" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yc.movie.bean.News">
+    <result column="news_content" jdbcType="LONGVARBINARY" property="newsContent" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    news_id, news_title, news_time, news_lookcount, news_picture, news_movie, news_state
+  </sql>
+  <sql id="Blob_Column_List">
+    news_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.yc.movie.bean.NewsExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from news
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.yc.movie.bean.NewsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from news
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from news
+    where news_id = #{newsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from news
+    where news_id = #{newsId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.movie.bean.NewsExample">
+    delete from news
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.movie.bean.News">
+    insert into news (news_id, news_title, news_time, 
+      news_lookcount, news_picture, news_movie, 
+      news_state, news_content)
+    values (#{newsId,jdbcType=INTEGER}, #{newsTitle,jdbcType=VARCHAR}, #{newsTime,jdbcType=VARCHAR}, 
+      #{newsLookcount,jdbcType=INTEGER}, #{newsPicture,jdbcType=VARCHAR}, #{newsMovie,jdbcType=INTEGER}, 
+      #{newsState,jdbcType=VARCHAR}, #{newsContent,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.movie.bean.News">
+    insert into news
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="newsId != null">
+        news_id,
+      </if>
+      <if test="newsTitle != null">
+        news_title,
+      </if>
+      <if test="newsTime != null">
+        news_time,
+      </if>
+      <if test="newsLookcount != null">
+        news_lookcount,
+      </if>
+      <if test="newsPicture != null">
+        news_picture,
+      </if>
+      <if test="newsMovie != null">
+        news_movie,
+      </if>
+      <if test="newsState != null">
+        news_state,
+      </if>
+      <if test="newsContent != null">
+        news_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="newsId != null">
+        #{newsId,jdbcType=INTEGER},
+      </if>
+      <if test="newsTitle != null">
+        #{newsTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="newsTime != null">
+        #{newsTime,jdbcType=VARCHAR},
+      </if>
+      <if test="newsLookcount != null">
+        #{newsLookcount,jdbcType=INTEGER},
+      </if>
+      <if test="newsPicture != null">
+        #{newsPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="newsMovie != null">
+        #{newsMovie,jdbcType=INTEGER},
+      </if>
+      <if test="newsState != null">
+        #{newsState,jdbcType=VARCHAR},
+      </if>
+      <if test="newsContent != null">
+        #{newsContent,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.movie.bean.NewsExample" resultType="java.lang.Long">
+    select count(*) from news
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update news
+    <set>
+      <if test="record.newsId != null">
+        news_id = #{record.newsId,jdbcType=INTEGER},
+      </if>
+      <if test="record.newsTitle != null">
+        news_title = #{record.newsTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.newsTime != null">
+        news_time = #{record.newsTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.newsLookcount != null">
+        news_lookcount = #{record.newsLookcount,jdbcType=INTEGER},
+      </if>
+      <if test="record.newsPicture != null">
+        news_picture = #{record.newsPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.newsMovie != null">
+        news_movie = #{record.newsMovie,jdbcType=INTEGER},
+      </if>
+      <if test="record.newsState != null">
+        news_state = #{record.newsState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.newsContent != null">
+        news_content = #{record.newsContent,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update news
+    set news_id = #{record.newsId,jdbcType=INTEGER},
+      news_title = #{record.newsTitle,jdbcType=VARCHAR},
+      news_time = #{record.newsTime,jdbcType=VARCHAR},
+      news_lookcount = #{record.newsLookcount,jdbcType=INTEGER},
+      news_picture = #{record.newsPicture,jdbcType=VARCHAR},
+      news_movie = #{record.newsMovie,jdbcType=INTEGER},
+      news_state = #{record.newsState,jdbcType=VARCHAR},
+      news_content = #{record.newsContent,jdbcType=LONGVARBINARY}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update news
+    set news_id = #{record.newsId,jdbcType=INTEGER},
+      news_title = #{record.newsTitle,jdbcType=VARCHAR},
+      news_time = #{record.newsTime,jdbcType=VARCHAR},
+      news_lookcount = #{record.newsLookcount,jdbcType=INTEGER},
+      news_picture = #{record.newsPicture,jdbcType=VARCHAR},
+      news_movie = #{record.newsMovie,jdbcType=INTEGER},
+      news_state = #{record.newsState,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.movie.bean.News">
+    update news
+    <set>
+      <if test="newsTitle != null">
+        news_title = #{newsTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="newsTime != null">
+        news_time = #{newsTime,jdbcType=VARCHAR},
+      </if>
+      <if test="newsLookcount != null">
+        news_lookcount = #{newsLookcount,jdbcType=INTEGER},
+      </if>
+      <if test="newsPicture != null">
+        news_picture = #{newsPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="newsMovie != null">
+        news_movie = #{newsMovie,jdbcType=INTEGER},
+      </if>
+      <if test="newsState != null">
+        news_state = #{newsState,jdbcType=VARCHAR},
+      </if>
+      <if test="newsContent != null">
+        news_content = #{newsContent,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where news_id = #{newsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yc.movie.bean.News">
+    update news
+    set news_title = #{newsTitle,jdbcType=VARCHAR},
+      news_time = #{newsTime,jdbcType=VARCHAR},
+      news_lookcount = #{newsLookcount,jdbcType=INTEGER},
+      news_picture = #{newsPicture,jdbcType=VARCHAR},
+      news_movie = #{newsMovie,jdbcType=INTEGER},
+      news_state = #{newsState,jdbcType=VARCHAR},
+      news_content = #{newsContent,jdbcType=LONGVARBINARY}
+    where news_id = #{newsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.movie.bean.News">
+    update news
+    set news_title = #{newsTitle,jdbcType=VARCHAR},
+      news_time = #{newsTime,jdbcType=VARCHAR},
+      news_lookcount = #{newsLookcount,jdbcType=INTEGER},
+      news_picture = #{newsPicture,jdbcType=VARCHAR},
+      news_movie = #{newsMovie,jdbcType=INTEGER},
+      news_state = #{newsState,jdbcType=VARCHAR}
+    where news_id = #{newsId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yc.movie.dao.PlayMapper">
+  <resultMap id="BaseResultMap" type="com.yc.movie.bean.Play">
+    <id column="play_id" jdbcType="INTEGER" property="playId" />
+    <result column="play_movie" jdbcType="INTEGER" property="playMovie" />
+    <result column="play_time" jdbcType="VARCHAR" property="playTime" />
+    <result column="play_price" jdbcType="REAL" property="playPrice" />
+    <result column="play_endtime" jdbcType="VARCHAR" property="playEndtime" />
+    <result column="hall_id" jdbcType="INTEGER" property="hallId" />
+    <result column="cinema_id" jdbcType="INTEGER" property="cinemaId" />
+  </resultMap>
+   <resultMap id="ResultMapByStep" type="com.yc.movie.bean.Play">
+    <id column="play_id" jdbcType="INTEGER" property="playId" />
+    <result column="play_movie" jdbcType="INTEGER" property="playMovie" />
+    <result column="play_time" jdbcType="VARCHAR" property="playTime" />
+    <result column="play_price" jdbcType="REAL" property="playPrice" />
+    <result column="play_endtime" jdbcType="VARCHAR" property="playEndtime" />
+    <result column="hall_id" jdbcType="INTEGER" property="hallId" />
+    <result column="cinema_id" jdbcType="INTEGER" property="cinemaId" />
+    <association property="cinemahall" 
+	 		select="com.yc.movie.dao.CinemahallMapper.selectByPrimaryKey"
+	 		column="hall_id">
+ 	</association>
+ 	<association property="cinema" 
+	 		select="com.yc.movie.dao.CinemaMapper.selectByPrimaryKey"
+	 		column="cinema_id">
+ 	</association>
+ 	<association property="hitmovie" 
+	 		select="com.yc.movie.dao.HitmovieMapper.selectByPrimaryKey"
+	 		column="play_movie">
+ 	</association>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    play_id, play_movie, play_time, play_price, play_endtime, hall_id, cinema_id
+  </sql>
+  <select id="selectByExample" parameterType="com.yc.movie.bean.PlayExample" resultMap="ResultMapByStep">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from play
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapByStep">
+    select 
+    <include refid="Base_Column_List" />
+    from play
+    where play_id = #{playId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from play
+    where play_id = #{playId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.movie.bean.PlayExample">
+    delete from play
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.movie.bean.Play">
+    insert into play (play_id, play_movie, play_time, 
+      play_price, play_endtime, hall_id, 
+      cinema_id)
+    values (#{playId,jdbcType=INTEGER}, #{playMovie,jdbcType=INTEGER}, #{playTime,jdbcType=VARCHAR}, 
+      #{playPrice,jdbcType=REAL}, #{playEndtime,jdbcType=VARCHAR}, #{hallId,jdbcType=INTEGER}, 
+      #{cinemaId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.movie.bean.Play">
+    insert into play
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="playId != null">
+        play_id,
+      </if>
+      <if test="playMovie != null">
+        play_movie,
+      </if>
+      <if test="playTime != null">
+        play_time,
+      </if>
+      <if test="playPrice != null">
+        play_price,
+      </if>
+      <if test="playEndtime != null">
+        play_endtime,
+      </if>
+      <if test="hallId != null">
+        hall_id,
+      </if>
+      <if test="cinemaId != null">
+        cinema_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="playId != null">
+        #{playId,jdbcType=INTEGER},
+      </if>
+      <if test="playMovie != null">
+        #{playMovie,jdbcType=INTEGER},
+      </if>
+      <if test="playTime != null">
+        #{playTime,jdbcType=VARCHAR},
+      </if>
+      <if test="playPrice != null">
+        #{playPrice,jdbcType=REAL},
+      </if>
+      <if test="playEndtime != null">
+        #{playEndtime,jdbcType=VARCHAR},
+      </if>
+      <if test="hallId != null">
+        #{hallId,jdbcType=INTEGER},
+      </if>
+      <if test="cinemaId != null">
+        #{cinemaId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.movie.bean.PlayExample" resultType="java.lang.Long">
+    select count(*) from play
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update play
+    <set>
+      <if test="record.playId != null">
+        play_id = #{record.playId,jdbcType=INTEGER},
+      </if>
+      <if test="record.playMovie != null">
+        play_movie = #{record.playMovie,jdbcType=INTEGER},
+      </if>
+      <if test="record.playTime != null">
+        play_time = #{record.playTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.playPrice != null">
+        play_price = #{record.playPrice,jdbcType=REAL},
+      </if>
+      <if test="record.playEndtime != null">
+        play_endtime = #{record.playEndtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hallId != null">
+        hall_id = #{record.hallId,jdbcType=INTEGER},
+      </if>
+      <if test="record.cinemaId != null">
+        cinema_id = #{record.cinemaId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update play
+    set play_id = #{record.playId,jdbcType=INTEGER},
+      play_movie = #{record.playMovie,jdbcType=INTEGER},
+      play_time = #{record.playTime,jdbcType=VARCHAR},
+      play_price = #{record.playPrice,jdbcType=REAL},
+      play_endtime = #{record.playEndtime,jdbcType=VARCHAR},
+      hall_id = #{record.hallId,jdbcType=INTEGER},
+      cinema_id = #{record.cinemaId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.movie.bean.Play">
+    update play
+    <set>
+      <if test="playMovie != null">
+        play_movie = #{playMovie,jdbcType=INTEGER},
+      </if>
+      <if test="playTime != null">
+        play_time = #{playTime,jdbcType=VARCHAR},
+      </if>
+      <if test="playPrice != null">
+        play_price = #{playPrice,jdbcType=REAL},
+      </if>
+      <if test="playEndtime != null">
+        play_endtime = #{playEndtime,jdbcType=VARCHAR},
+      </if>
+      <if test="hallId != null">
+        hall_id = #{hallId,jdbcType=INTEGER},
+      </if>
+      <if test="cinemaId != null">
+        cinema_id = #{cinemaId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where play_id = #{playId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.movie.bean.Play">
+    update play
+    set play_movie = #{playMovie,jdbcType=INTEGER},
+      play_time = #{playTime,jdbcType=VARCHAR},
+      play_price = #{playPrice,jdbcType=REAL},
+      play_endtime = #{playEndtime,jdbcType=VARCHAR},
+      hall_id = #{hallId,jdbcType=INTEGER},
+      cinema_id = #{cinemaId,jdbcType=INTEGER}
+    where play_id = #{playId,jdbcType=INTEGER}
+  </update>
+</mapper>

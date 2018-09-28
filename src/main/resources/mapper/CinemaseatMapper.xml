@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yc.movie.dao.CinemaseatMapper">
+  <resultMap id="BaseResultMap" type="com.yc.movie.bean.Cinemaseat">
+    <id column="seat_id" jdbcType="INTEGER" property="seatId" />
+    <result column="hall_id" jdbcType="INTEGER" property="hallId" />
+    <result column="seat_state" jdbcType="VARCHAR" property="seatState" />
+    <result column="seat_row" jdbcType="INTEGER" property="seatRow" />
+    <result column="seat_column" jdbcType="INTEGER" property="seatColumn" />
+  </resultMap>
+  <resultMap id="ResultMapByStep" type="com.yc.movie.bean.Cinemaseat">
+    <id column="seat_id" jdbcType="INTEGER" property="seatId" />
+    <result column="hall_id" jdbcType="INTEGER" property="hallId" />
+    <result column="seat_state" jdbcType="VARCHAR" property="seatState" />
+    <result column="seat_row" jdbcType="INTEGER" property="seatRow" />
+    <result column="seat_column" jdbcType="INTEGER" property="seatColumn" />
+    <association property="cinemahall" 
+	 		select="com.yc.movie.dao.CinemahallMapper.selectByPrimaryKey"
+	 		column="hall_id">
+ 	</association>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    seat_id, hall_id, seat_state, seat_row, seat_column
+  </sql>
+  <select id="selectByExample" parameterType="com.yc.movie.bean.CinemaseatExample" resultMap="ResultMapByStep">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from cinemaseat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapByStep">
+    select 
+    <include refid="Base_Column_List" />
+    from cinemaseat
+    where seat_id = #{seatId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cinemaseat
+    where seat_id = #{seatId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.movie.bean.CinemaseatExample">
+    delete from cinemaseat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.movie.bean.Cinemaseat">
+    insert into cinemaseat (seat_id, hall_id, seat_state, 
+      seat_row, seat_column)
+    values (#{seatId,jdbcType=INTEGER}, #{hallId,jdbcType=INTEGER}, #{seatState,jdbcType=VARCHAR}, 
+      #{seatRow,jdbcType=INTEGER}, #{seatColumn,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.movie.bean.Cinemaseat">
+    insert into cinemaseat
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="seatId != null">
+        seat_id,
+      </if>
+      <if test="hallId != null">
+        hall_id,
+      </if>
+      <if test="seatState != null">
+        seat_state,
+      </if>
+      <if test="seatRow != null">
+        seat_row,
+      </if>
+      <if test="seatColumn != null">
+        seat_column,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="seatId != null">
+        #{seatId,jdbcType=INTEGER},
+      </if>
+      <if test="hallId != null">
+        #{hallId,jdbcType=INTEGER},
+      </if>
+      <if test="seatState != null">
+        #{seatState,jdbcType=VARCHAR},
+      </if>
+      <if test="seatRow != null">
+        #{seatRow,jdbcType=INTEGER},
+      </if>
+      <if test="seatColumn != null">
+        #{seatColumn,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.movie.bean.CinemaseatExample" resultType="java.lang.Long">
+    select count(*) from cinemaseat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cinemaseat
+    <set>
+      <if test="record.seatId != null">
+        seat_id = #{record.seatId,jdbcType=INTEGER},
+      </if>
+      <if test="record.hallId != null">
+        hall_id = #{record.hallId,jdbcType=INTEGER},
+      </if>
+      <if test="record.seatState != null">
+        seat_state = #{record.seatState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.seatRow != null">
+        seat_row = #{record.seatRow,jdbcType=INTEGER},
+      </if>
+      <if test="record.seatColumn != null">
+        seat_column = #{record.seatColumn,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cinemaseat
+    set seat_id = #{record.seatId,jdbcType=INTEGER},
+      hall_id = #{record.hallId,jdbcType=INTEGER},
+      seat_state = #{record.seatState,jdbcType=VARCHAR},
+      seat_row = #{record.seatRow,jdbcType=INTEGER},
+      seat_column = #{record.seatColumn,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.movie.bean.Cinemaseat">
+    update cinemaseat
+    <set>
+      <if test="hallId != null">
+        hall_id = #{hallId,jdbcType=INTEGER},
+      </if>
+      <if test="seatState != null">
+        seat_state = #{seatState,jdbcType=VARCHAR},
+      </if>
+      <if test="seatRow != null">
+        seat_row = #{seatRow,jdbcType=INTEGER},
+      </if>
+      <if test="seatColumn != null">
+        seat_column = #{seatColumn,jdbcType=INTEGER},
+      </if>
+    </set>
+    where seat_id = #{seatId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.movie.bean.Cinemaseat">
+    update cinemaseat
+    set hall_id = #{hallId,jdbcType=INTEGER},
+      seat_state = #{seatState,jdbcType=VARCHAR},
+      seat_row = #{seatRow,jdbcType=INTEGER},
+      seat_column = #{seatColumn,jdbcType=INTEGER}
+    where seat_id = #{seatId,jdbcType=INTEGER}
+  </update>
+</mapper>
